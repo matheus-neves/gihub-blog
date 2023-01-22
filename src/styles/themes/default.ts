@@ -21,4 +21,4 @@ export const defaultTheme = {
     md: 900,
     lg: 1120
   }
-};
+} as const;
