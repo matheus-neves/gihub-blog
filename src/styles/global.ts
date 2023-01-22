@@ -33,6 +33,14 @@ export const GlobalStyles = createGlobalStyle`
     font-weight: 800;
   }
 
+  p {
+    line-height: 1.6;
+  }
+
+  ul {
+    list-style: none;
+  }
+  
   button {
     cursor: pointer;
   }
