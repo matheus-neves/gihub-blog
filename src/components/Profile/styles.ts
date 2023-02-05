@@ -25,6 +25,7 @@ export const ProfileContainer = styled.div`
     right: 2rem;
     text-decoration: none;
     color: ${({ theme }) => theme.pallete.blue};
+    padding-bottom: 2px;
 
     span {
       text-transform: uppercase;
@@ -36,6 +37,12 @@ export const ProfileContainer = styled.div`
     svg {
       width: 1.2rem;
       height: 1.2rem;
+    }
+
+    transition: border-bottom 0.1s;
+
+    &:hover {
+      border-bottom: 1px solid ${({ theme }) => theme.pallete.blue};
     }
   }
 
