@@ -1,4 +1,3 @@
-import imgAvatar from '@assets/avatar.jpg';
 import { ProfileContainer, ProfileContent } from '@components/Profile/styles';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import {
@@ -7,33 +6,77 @@ import {
   faUserGroup
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { api } from '@src/lib/axios';
+import { useQuery } from 'react-query';
+import { ProfileSkeleton } from './components/ProfileSkeleton';
+
+const username = 'matheus-neves';
+
+interface GetProfileReturnType {
+  name: string;
+  bio: string;
+  avatarUrl: string;
+  htmlUrl: string;
+  followers: number;
+  company: string;
+}
+
+export const getProfile = async () => {
+  const { data } = await api.get(`https://api.github.com/users/${username}`);
+
+  const { avatar_url, bio, company, followers, html_url, name } = data;
+
+  const formattedData = {
+    avatarUrl: avatar_url,
+    bio,
+    company,
+    followers,
+    htmlUrl: html_url,
+    name
+  } as GetProfileReturnType;
+
+  return formattedData;
+};
 
 export function Profile() {
+  const { data, isLoading } = useQuery({
+    queryKey: ['profile'],
+    queryFn: getProfile
+  });
+
+  if (isLoading) {
+    return (
+      <ProfileContainer>
+        <ProfileSkeleton />
+      </ProfileContainer>
+    );
+  }
+
   return (
     <ProfileContainer>
-      <img src={imgAvatar} alt="Avatar" />
+      <img src={data?.avatarUrl} alt="Avatar" />
       <ProfileContent>
-        <h2>Cameron Williamson</h2>
-        <p>
-          Tristique volutpat pulvinar vel massa, pellentesque egestas. Eu
-          viverra massa quam dignissim aenean malesuada suscipit. Nunc, volutpat
-          pulvinar vel mass.
-        </p>
+        <h2>{data?.name}</h2>
+        <p>{data?.bio}</p>
         <ul>
           <li>
             <FontAwesomeIcon icon={faGithub} />
-            <span>cameronwll</span>
+            <span>{data?.name}</span>
           </li>
+          {data?.company && (
+            <li>
+              <FontAwesomeIcon icon={faBuilding} />
+              <span>{data.company}</span>
+            </li>
+          )}
           <li>
-            <FontAwesomeIcon icon={faBuilding} /> <span>Rocketseat</span>
-          </li>
-          <li>
-            <FontAwesomeIcon icon={faUserGroup} /> <span>32 followers</span>
+            <FontAwesomeIcon icon={faUserGroup} />
+            <span>{data?.followers} followers</span>
           </li>
         </ul>
       </ProfileContent>
-      <a href="/#">
-        <span>Github</span>{' '}
+      <a href={data?.htmlUrl} target="_blank" rel="noreferrer">
+        <span>Github</span>
         <FontAwesomeIcon icon={faArrowUpRightFromSquare} fade />
       </a>
     </ProfileContainer>
