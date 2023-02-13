@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --max-width: 864px;
+    --font-nunito-sans: 'Nunito';
+  }
+
+  html {
+    @apply font-primary;
+  }
+
+  body {
+    @apply text-primary-base-text;
+    @apply bg-primary-base-background;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5 {
+    @apply text-primary-base-title;
+    @apply font-bold;
+  }
+
+  p {
+    @apply leading-relaxed;
+    @apply text-primary-base-text;
+  }
+
+  body, input, textarea, button {
+    @apply font-normal;
+  }
+}
