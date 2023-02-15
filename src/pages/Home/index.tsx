@@ -19,7 +19,7 @@ export function Home() {
     resolver: zodResolver(validationSchema)
   });
 
-  const { data, mutate, reset, isLoading } = useMutation({
+  const { data, mutate, reset, isLoading, isSuccess } = useMutation({
     mutationKey: ['issues'],
     mutationFn: fetchIssues,
     onSuccess: () => {
@@ -71,10 +71,18 @@ export function Home() {
               focus:outline-primary-blue
             "
             type="text"
-            placeholder="Buscar conteúdo"
+            placeholder="Search"
             {...register('query')}
           />
         </div>
+
+        {isSuccess && !data.length && (
+          <div className="flex w-full items-start justify-center">
+            <strong className="text-lg text-zinc-200">
+              No issues found 😐. Try a different word!
+            </strong>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
           {isLoading && (
