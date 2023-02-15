@@ -12,7 +12,8 @@ import { getProfile } from './utils';
 export function Profile() {
   const { data, isLoading } = useQuery({
     queryKey: ['profile'],
-    queryFn: getProfile
+    queryFn: getProfile,
+    staleTime: 1000 * 60 * 60 * 24 // 24 hours
   });
 
   if (isLoading) return <ProfileSkeleton />;
