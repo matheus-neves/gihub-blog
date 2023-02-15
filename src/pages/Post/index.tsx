@@ -1,149 +1,61 @@
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
-import {
-  faArrowUpRightFromSquare,
-  faCalendarDay,
-  faChevronLeft,
-  faComment
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { api } from '@src/lib/axios';
-import { getRelativeTime } from '@src/utils/getRelativeTime';
+import { useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { useQuery } from 'react-query';
-import { Link, useParams } from 'react-router-dom';
-
-interface PostReturnType {
-  title: string;
-  comments: number;
-  updated_at: string;
-  formattedUpdatedAt: string;
-  html_url: string;
-  body: string;
-  name: string;
-}
+import { useParams } from 'react-router-dom';
+import { PostArticleSkeleton } from './components/PostArticleSkeleton';
+import { PostHeader } from './components/PostHeader';
+import { PostHeaderSkeleton } from './components/PostHeaderSkeleton';
+import { fetchIssue } from './utils';
 
 export function Post() {
   const { number } = useParams();
 
-  console.log(number);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['issue'],
-    queryFn: async () => {
-      const response = await api.get(
-        `https://api.github.com/repos/rocketseat-education/reactjs-github-blog-challenge/issues/${number}`
-      );
-
-      const { title, comments, updated_at, html_url, body, user } =
-        response.data;
-
-      const formattedData = {
-        title,
-        comments,
-        formattedUpdatedAt: getRelativeTime(new Date(updated_at).getTime()),
-        html_url,
-        body,
-        name: user.login
-      } as PostReturnType;
-
-      return formattedData;
-    },
+    queryFn: () => fetchIssue({ number }),
     staleTime: 1000 * 60 * 60 * 24 // 24 hours
   });
 
-  console.log(data);
+  if (isLoading) {
+    return (
+      <>
+        <PostHeaderSkeleton />
+        <PostArticleSkeleton />
+      </>
+    );
+  }
+
+  if (isError || !data) {
+    return <p>404</p>;
+  }
+
+  const { comments, formattedUpdatedAt, html_url, name, title, body } = data;
+
   return (
     <>
-      <header
+      <PostHeader
+        data={{ comments, formattedUpdatedAt, html_url, name, title }}
+      />
+      <article
         className="
-        flex
-        flex-col
-        bg-primary-base-profile
-        p-5
-        mt-[-30px]
-        rounded-[10px]
+        py-5 
+        px-4 
+        md:py-10 
 
-        md:py-8
-        md:px-10
-        md:mt-[-80px]
-      "
+        prose 
+        max-w-none 
+        prose-a:text-primary-blue 
+        prose-headings:text-primary-base-title
+        prose-p:text-primary-base-text
+        prose-strong:text-primary-base-subtitle
+        prose-li:text-primary-base-span"
       >
-        <div className="flex items-center justify-between w-full mb-5">
-          <Link
-            to="/"
-            className="
-            flex
-            no-underline
-            text-primary-blue
-            border-b
-            border-b-transparent
-          "
-          >
-            <FontAwesomeIcon icon={faChevronLeft} width={10} height={10} />
-            <span className="uppercase ml-2 text-xs font-bold">Back</span>
-          </Link>
-          <a
-            href={data?.html_url}
-            target="_blank"
-            rel="noreferrer"
-            className="
-            flex
-            
-            no-underline
-            text-primary-blue
-            border-b
-            border-b-transparent
-
-            transition
-            hover:border-primary-blue
-          "
-          >
-            <span className="uppercase mr-2 text-xs font-bold">
-              See on github
-            </span>
-            <FontAwesomeIcon
-              icon={faArrowUpRightFromSquare}
-              fade
-              width={12}
-              height={12}
-            />
-          </a>
-        </div>
-        <div>
-          <h1 className="text-2xl mb-2">{data?.title}</h1>
-          <ul className="flex flex-wrap flex-1 gap-3 md:gap-8">
-            <li className="flex items-center">
-              <FontAwesomeIcon
-                icon={faGithub}
-                className=" text-primary-base-label min-h-[18px]"
-                width={18}
-                height={18}
-              />
-              <span className="text-primary-base-span ml-2">{data?.name}</span>
-            </li>
-            <li className="flex items-center">
-              <FontAwesomeIcon
-                icon={faCalendarDay}
-                className=" text-primary-base-label min-h-[18px]"
-                width={18}
-                height={18}
-              />
-              <span className="text-primary-base-span ml-2">
-                {data?.formattedUpdatedAt}
-              </span>
-            </li>
-            <li className="flex items-center">
-              <FontAwesomeIcon
-                icon={faComment}
-                className=" text-primary-base-label min-h-[18px]"
-              />
-              <span className="text-primary-base-span ml-2">
-                {data?.comments} comments
-              </span>
-            </li>
-          </ul>
-        </div>
-      </header>
-      <div>{data?.body}</div>
+        <ReactMarkdown children={body} />
+      </article>
     </>
   );
 }
