@@ -10,7 +10,6 @@
   <a href="https://github.com/matheus-neves">
     <img alt="Author Matheus Neves" src="https://img.shields.io/badge/author-Matheus%20Neves-%2306b656?color=06b656&style=for-the-badge">
   </a>
-  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/matheus-neves/github-blog?color=06b656&style=for-the-badge">
   <a href="https://github.com/matheus-neves/ignite-todo-challenge/stargazers">
     <img alt="Stargazers" src="https://img.shields.io/github/stars/matheus-neves/github-blog?color=06b656&style=for-the-badge">
   </a>
@@ -55,12 +54,13 @@ The main objective of the challenge is to develop an application that will use t
 
 1. Clone the repository: `git@github.com:matheus-neves/github-blog.git`
 2. Access the directory: `cd github-blog`
-3. Install the dependencies: `yarn`
-4. Run the app: `yarn dev`
+3. Duplicate the .env-example file found in `/src`, after renaming it to .env
+4. Install the dependencies: `yarn`
+5. Run the app: `yarn dev`
 
 ## :memo: License
 
-This challenge is under license from MIT. See the archive [LICENSE](https://github.com/matheus-neves/github-blog/blob/main/LICENSE.md) for more details.
+This challenge is under license from MIT. See the archive [LICENSE](https://github.com/matheus-neves/github-blog/blob/main/LICENSE) for more details.
 
 ---
 
