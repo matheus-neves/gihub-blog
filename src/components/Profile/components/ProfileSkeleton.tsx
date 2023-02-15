@@ -29,11 +29,11 @@ export function ProfileSkeleton() {
 
       <div className="flex flex-1 flex-col w-full animate-pulse">
         {/* Title */}
-        <div className="h-5 w-[236px] bg-slate-700 rounded mt-5 mb-5"></div>
+        <div className="h-4 w-[236px] bg-slate-700 rounded mt-5 mb-5"></div>
         {/* Description */}
         <div className="flex flex-col gap-3">
-          <div className="h-4 w-[90%] bg-slate-700 rounded"></div>
-          <div className="h-4 w-[80%] bg-slate-700 rounded"></div>
+          <div className="h-3 w-11/12 bg-slate-700 rounded"></div>
+          <div className="h-3 w-10/12 bg-slate-700 rounded"></div>
         </div>
         {/* Items */}
         <div className="flex flex-wrap mt-5 gap-3 md:gap-6">
